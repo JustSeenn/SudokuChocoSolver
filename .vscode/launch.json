@@ -1,0 +1,48 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "com.sonalake.choco.Main",
+      "projectName": "chocosolver-test"
+    },
+    {
+      "type": "java",
+      "name": "Sudoku",
+      "request": "launch",
+      "mainClass": "com.sonalake.choco.Sudoku",
+      "projectName": "chocosolver-test"
+    },
+    {
+      "type": "java",
+      "name": "SudokuGenerator",
+      "request": "launch",
+      "mainClass": "SudokuGenerator",
+      "projectName": "Sudoku_5ac8b8c2"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Main",
+      "projectName": "Sudoku_5ac8b8c2"
+    },
+    {
+      "type": "java",
+      "name": "Solution",
+      "request": "launch",
+      "mainClass": "Solution",
+      "projectName": "Sudoku_5ac8b8c2"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/I576958/Documents/Sudoku",
+      "program": "/Users/I576958/Documents/Sudoku/build/Debug/outDebug"
+    }
+  ]
+}
