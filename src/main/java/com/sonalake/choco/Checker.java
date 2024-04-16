@@ -114,5 +114,10 @@ public class Checker {
         }
         return true;
     }
+    // this function checks if the sudoku is valid or not by doing the following:
+    // 1. check if the row has the same number
+    // 2. check if the column has the same number
+    // 3. check if the box has the same number
+    // if any of the above conditions are true, then the sudoku is not valid
 
 }

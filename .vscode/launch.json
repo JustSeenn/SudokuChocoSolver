@@ -3,6 +3,34 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ConstructorInt",
+      "request": "launch",
+      "mainClass": "com.sonalake.choco.ConstructorInt",
+      "projectName": "SudokuChocoSolver"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "com.sonalake.choco.Main",
+      "projectName": "SudokuChocoSolver"
+    },
+    {
+      "type": "java",
+      "name": "ConstructorIntNew",
+      "request": "launch",
+      "mainClass": "com.sonalake.choco.ConstructorIntNew",
+      "projectName": "SudokuChocoSolver"
+    },
+    {
+      "type": "java",
+      "name": "VariableSizeSudokuGenerator",
+      "request": "launch",
+      "mainClass": "com.sonalake.choco.VariableSizeSudokuGenerator",
+      "projectName": "SudokuChocoSolver"
+    },
+    {
+      "type": "java",
       "name": "Main",
       "request": "launch",
       "mainClass": "com.sonalake.choco.Main",

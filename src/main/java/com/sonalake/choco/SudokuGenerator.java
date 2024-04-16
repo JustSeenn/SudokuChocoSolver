@@ -14,9 +14,9 @@ public class SudokuGenerator {
             for (int i = 0; i < NUM_GRIDS_TO_GENERATE; i++) {
                 ConstructorInt sudoku = new ConstructorInt(size);
                 sudoku.createSudokuGrid();
-                sudoku.removeCells((size * size) - 27, (size * size) - 17);
-                int[][] grid = sudoku.getGrid();
-                writeGridToFile(writer, grid);
+                //sudoku.removeCells((size * size) - 27, (size * size) - 17);
+                //int[][] grid = sudoku.getGrid();
+                //writeGridToFile(writer, grid);
                 writer.write("\n"); // Ajoute une ligne vide entre les grilles
             }
             writer.close();

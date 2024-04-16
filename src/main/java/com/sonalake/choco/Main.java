@@ -10,17 +10,10 @@ public class Main {
         int size = 25; // Taille de la grille de Sudoku (modifiable)
         ConstructorInt sudoku = new ConstructorInt(size);
         sudoku.createSudokuGrid();
-        System.out.println("------------------------------------------------------------");
+        sudoku.removeCountCells(110);
         sudoku.removeCells((size * size) - 27, (size * size) - 17);
-        int[][] grid = sudoku.getGrid();
-        // print all the grids
-        for (int[] row : grid) {
-            for (int cell : row) {
-                System.out.print(cell + " ");
-            }
-            System.out.println();
-        }
-
+        sudoku.printSudokuGrid();
+        //System.out.println(Checker.isSudokuValid(grid));
     }
 
     // public static void main(String[] args) {
