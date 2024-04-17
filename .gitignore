@@ -1,1 +1,11 @@
-build
+.gradle/
+build/
+out/
+bin/
+
+.idea/
+.vscode/
+
+.DS_Store
+
+Thumbs.db
