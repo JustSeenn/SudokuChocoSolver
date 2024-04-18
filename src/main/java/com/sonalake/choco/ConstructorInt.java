@@ -1,5 +1,6 @@
 package com.sonalake.choco;
 
+import org.antlr.v4.gui.SystemFontMetrics;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.search.strategy.Search;
@@ -26,6 +27,7 @@ public class ConstructorInt {
 
     public void createSudokuGrid() {
         fillGrid();
+        System.out.println(hasUniqueSolution());
     }
 
     public int[][] getGrid() {
@@ -187,6 +189,7 @@ public class ConstructorInt {
                 }
             }
         }
+        System.out.println("Removed " + removed + " cells");
         //System.out.println(Checker.isSudokuValid(grid));
     }
 
@@ -208,22 +211,21 @@ public class ConstructorInt {
 
         boolean hasSolution = solver.solve();
         
-        //System.out.println("Check done on first check : ");
-        //System.out.println(hasSolution);
+        System.out.println("Check done on first check : ");
+        System.out.println(hasSolution);
 
         if (!hasSolution) {
             return false; // Pas de solution possible
         }
         
-        solver.limitTime("5s");
-
+        ConstraintImpactStrategy strategy = new ConstraintImpactStrategy(model, flatten(vars));
         // need to give a pessimistic strategy to avoid finding the same solution
-
+        model.getSolver().setSearch(strategy);
         // Si on trouve une solution, on essaye d'en trouver une autre
         boolean hasSecondSolution = solver.solve();
         
-        //System.out.println("Check done on second check, no second solution ?: ");
-        //System.out.println(!hasSecondSolution);
+        System.out.println("Check done on second check, no second solution ?: ");
+        System.out.println(!hasSecondSolution);
 
         // Si on trouve une deuxième solution, cela signifie qu'il n'y a pas unicité
         return !hasSecondSolution;
@@ -247,9 +249,7 @@ public class ConstructorInt {
         solver.setSearch(Search.minDomLBSearch(flatten(vars)));
 
         boolean hasSolution = solver.solve();
-        
-        //System.out.println("Check done on first check : ");
-        //System.out.println(hasSolution);
+         
 
         if (!hasSolution) {
             return false; // Pas de solution possible
@@ -259,15 +259,13 @@ public class ConstructorInt {
 
         boolean hasSecondSolution = solver.solve();
         
-        //System.out.println("Check done on second check, no second solution ?: ");
-        //System.out.println(!hasSecondSolution);
 
         // If we find a second solution, it means that there is no uniqueness
         return !hasSecondSolution;
     }
 
 
-    private static IntVar[][] buildGrid(Model model, int[][] predefinedRows) {
+    public static IntVar[][] buildGrid(Model model, int[][] predefinedRows) {
         // this grid will contain variables in the same shape as the input
         int size = predefinedRows.length;
         IntVar[][] grid = new IntVar[size][size];
@@ -292,7 +290,7 @@ public class ConstructorInt {
         return grid;
       }
 
-    private static IntVar[] flatten(IntVar[][] board) {
+    public static IntVar[] flatten(IntVar[][] board) {
         IntVar[] flat = new IntVar[board.length * board[0].length];
         for (int i = 0; i < board.length; i++) {
           for (int j = 0; j < board[0].length; j++) {
@@ -302,7 +300,7 @@ public class ConstructorInt {
         return flat;
       }
 
-    private void addConstraints(Model model, IntVar[][] vars) {
+    public void addConstraints(Model model, IntVar[][] vars) {
         for (int i = 0; i != vars.length; i++) {
             model.allDifferent(getCellsInRow(vars, i)).post();
             model.allDifferent(getCellsInColumn(vars, i)).post();
