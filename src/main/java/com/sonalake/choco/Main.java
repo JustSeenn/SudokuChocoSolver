@@ -1,4 +1,5 @@
 package com.sonalake.choco;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,16 +8,16 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
-        int size = 1000; // Size of the sudoku grid (size x size)
+        int size = 9; // Size of the sudoku grid (size x size)
         ConstructorInt sudoku = new ConstructorInt(size);
         sudoku.createSudokuGrid();
-        //sudoku.removeCountCells(1000); // number of cells to remove bruteforce
-        sudoku.removeCountCellsSymmetry(500);
+        sudoku.removeCountCells(50); // number of cells to remove bruteforce
+        // sudoku.removeCountCellsSymmetry(500);
         // number of cells to remove with backtracking after bruteforce
         // ex: 2000 bruteforce + 1000 = 3000 here
-        sudoku.removeCells(2000,2100); 
+        sudoku.removeCells(10, 11);
         sudoku.printSudokuGrid();
-        sudoku.saveGridAsIntegerList("sudoku_grid_100"); // save the grid as a list of integers for sudoku solver
+        sudoku.saveGridAsIntegerList("sudoku_grids_9"); // save the grid as a list of integers for sudoku solver
         long endTime = System.currentTimeMillis();
         System.out.println("That took " + (endTime - startTime) + " milliseconds");
     }
