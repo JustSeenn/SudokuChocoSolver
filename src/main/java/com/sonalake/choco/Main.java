@@ -1,26 +1,23 @@
 package com.sonalake.choco;
-
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Main {
 
-    public static void main(String[] args) {
-        int size = 25; // Taille de la grille de Sudoku (modifiable)
+    public static void main(String[] args) throws IOException {
+        long startTime = System.currentTimeMillis();
+        int size = 9; // Size of the sudoku grid (size x size)
         ConstructorInt sudoku = new ConstructorInt(size);
         sudoku.createSudokuGrid();
-        System.out.println("------------------------------------------------------------");
-        sudoku.removeCells((size * size) - 27, (size * size) - 17);
-        int[][] grid = sudoku.getGrid();
-        // print all the grids
-        for (int[] row : grid) {
-            for (int cell : row) {
-                System.out.print(cell + " ");
-            }
-            System.out.println();
-        }
-
+        sudoku.removeCountCells(1000); // number of cells to remove bruteforce
+        // number of cells to remove with backtracking after bruteforce
+        // ex: 2000 bruteforce + 1000 = 3000 here
+        sudoku.removeCells(2000,2100); 
+        sudoku.printSudokuGrid();
+        sudoku.saveGridAsIntegerList("sudoku_grid_100"); // save the grid as a list of integers for sudoku solver
+        long endTime = System.currentTimeMillis();
+        System.out.println("That took " + (endTime - startTime) + " milliseconds");
     }
 
     // public static void main(String[] args) {
