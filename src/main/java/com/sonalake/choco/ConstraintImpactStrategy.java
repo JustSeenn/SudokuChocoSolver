@@ -67,7 +67,7 @@ public class ConstraintImpactStrategy extends AbstractStrategy<IntVar> {
                                 (propagationConditions & IntEventType.DECUPP.getMask()) != 0) {
                                 // We consider the propagator for INSTANTIATE, INCLOW, or DECUPP events
                                 // Add its impact to the total impact
-                                impact += constraint.getPropagator(i).getPropagationConditions(j); // Fix: Remove .getPotentialImpact()
+                                impact += constraint.getPropagator(i).getPropagationConditions(j);
                             }
                         }
                     }
