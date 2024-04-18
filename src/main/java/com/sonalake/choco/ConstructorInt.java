@@ -172,6 +172,7 @@ public class ConstructorInt {
                 grid[row][col] = temp; // If removing the cell doesn't leave a unique solution, restore the cell
             } else {
                 removed++;
+                //System.out.println("Removed " + removed + " cells");
                 if (removed >= min && removed <= max) {
                     if (!hasUniqueSolution(grid)) {
                         System.out.println("Failed to remove " + removed + " cells");
@@ -241,17 +242,22 @@ public class ConstructorInt {
         Solver solver = model.getSolver();
         solver.setSearch(Search.minDomLBSearch(flatten(vars)));
 
+        long startTime = System.currentTimeMillis();
         boolean hasSolution = solver.solve();
-
-        // System.out.println("Check done on first check : ");
-        // System.out.println(hasSolution);
-
+        long endTime = System.currentTimeMillis();
+        
+        
+        long time = endTime - startTime;
+       
         if (!hasSolution) {
             return false; // Pas de solution possible
         }
 
-        solver.limitTime("5s");
-
+        solver.limitTime(time * 5);
+        ConstraintImpactStrategy strategy = new ConstraintImpactStrategy(model, flatten(vars));
+        // need to give a pessimistic strategy to avoid finding the same solution
+        model.getSolver().setSearch(strategy);
+        // Si on trouve une solution, on essaye d'en trouver une autre
         boolean hasSecondSolution = solver.solve();
 
         // System.out.println("Check done on second check, no second solution ?: ");
