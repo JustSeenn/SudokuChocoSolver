@@ -65,6 +65,49 @@ public class ConstructorInt {
         }
     }
 
+    public void removeCountCellsSymmetry(int count) {
+        int size = grid.length;
+        List<Integer> indices = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                indices.add(i * size + j);
+            }
+        }
+        Collections.shuffle(indices);
+    
+        int removed = 0;
+        int[][] copyGrid = new int[size][size];
+        for (int i = 0; i < size; i++) {
+            System.arraycopy(grid[i], 0, copyGrid[i], 0, size);
+        }
+    
+        for (int i = 0; i < indices.size() && removed < count / 2; i++) {
+            int pos = indices.get(i);
+            int row = pos / size;
+            int col = pos % size;
+    
+            // Calculez la position symétrique
+            int symRow = size - 1 - row;
+            int symCol = size - 1 - col;
+    
+            // Assurez-vous que les deux cellules contiennent des valeurs avant de les effacer
+            if (copyGrid[row][col] != 0 && copyGrid[symRow][symCol] != 0) {
+                copyGrid[row][col] = 0;
+                copyGrid[symRow][symCol] = 0;
+                removed += 2; // Incremente par deux puisque deux cellules sont retirées à chaque fois
+            }
+        }
+    
+        if (!hasUniqueSolution(copyGrid)) {
+            System.out.println("Failed to remove " + count + " cells symmetrically.");
+            removeCountCells(count); // Réessayer si la solution n'est pas unique
+        } else {
+            grid = copyGrid;
+            System.out.println("Removed " + count + " cells with symmetric approach");
+        }
+    }
+    
+
     public void removeCountCells(int count) {
         //remove cells from the grid without checking for unique solution
         //check at the end if the grid has an unique solution if not retry
