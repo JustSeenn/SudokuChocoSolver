@@ -61,14 +61,14 @@ public class Sudoku {
     solver.showShortStatistics();
     solver.setSearch(Search.minDomLBSearch(flatten(grid)));
     solver.solve();
-    // System.out.print("[");
-    // for (IntVar[] v : grid) {
-    // for (IntVar i : v) {
-    // System.out.print(i.getValue() + ",");
-    // }
-    // System.out.println();
-    // }
-    // System.out.print("]");
+    System.out.print("[");
+    for (IntVar[] v : grid) {
+      for (IntVar i : v) {
+        System.out.print(i.getValue() + ",");
+      }
+      System.out.println();
+    }
+    System.out.print("]");
 
     // print out the solution
     printGrid(grid, true, true);
