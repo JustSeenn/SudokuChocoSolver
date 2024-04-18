@@ -7,11 +7,11 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
-        int size = 100; // Size of the sudoku grid (size x size)
+        int size = 1000; // Size of the sudoku grid (size x size)
         ConstructorInt sudoku = new ConstructorInt(size);
         sudoku.createSudokuGrid();
         //sudoku.removeCountCells(1000); // number of cells to remove bruteforce
-        sudoku.removeCountCellsSymmetry(1000);
+        sudoku.removeCountCellsSymmetry(500);
         // number of cells to remove with backtracking after bruteforce
         // ex: 2000 bruteforce + 1000 = 3000 here
         sudoku.removeCells(2000,2100); 

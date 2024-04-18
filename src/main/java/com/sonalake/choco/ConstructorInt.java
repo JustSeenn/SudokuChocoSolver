@@ -100,7 +100,7 @@ public class ConstructorInt {
     
         if (!hasUniqueSolution(copyGrid)) {
             System.out.println("Failed to remove " + count + " cells symmetrically.");
-            removeCountCells(count); // Réessayer si la solution n'est pas unique
+            removeCountCellsSymmetry(count);
         } else {
             grid = copyGrid;
             System.out.println("Removed " + count + " cells with symmetric approach");
