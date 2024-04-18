@@ -82,7 +82,12 @@ public class Sudoku {
       if (line != null) {
         String[] values = line.split(",");
         for (int i = 0; i < values.length && i < 81; i++) {
-          sudokuGrid[i] = Integer.parseInt(values[i].trim());
+          if (!values[i].equals(" ")) {
+            System.out.println("val=" + values[i].trim());
+
+            sudokuGrid[i] = Integer.parseInt(values[i].trim());
+
+          }
         }
       }
     } catch (IOException e) {

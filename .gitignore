@@ -1,7 +1,7 @@
-.gradle/
-build/
+# .gradle/
+# build/
 out/
-bin/
+# bin/
 
 .idea/
 .vscode/
