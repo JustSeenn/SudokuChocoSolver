@@ -106,7 +106,7 @@ public class ConstructorInt {
             // System.out.println("Failed to remove " + count + " cells symmetrically.");
             removeCountCellsSymmetry(count);
         } else {
-            System.out.println("Removed " + count + " cells symmetrically.");
+            System.out.println("Removed " + removed + " cells symmetrically.");
             grid = copyGrid;
             blankCellsCount = removed;
         }
