@@ -1,0 +1,29 @@
+# Gradle files
+.gradle/
+build/
+
+# Build output directories
+out/
+bin/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE files (Eclipse, IntelliJ)
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.vscode/
+
+# Mac OS X specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
