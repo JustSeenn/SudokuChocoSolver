@@ -150,8 +150,8 @@ public class ConstructorInt {
             removeCountCells(count);
         } else {
             grid = copyGrid;
-            blankCellsCount = count;
-            System.out.println("Removed " + count + " cells with brute force");
+            blankCellsCount = removed;
+            System.out.println("Removed " + removed + " cells with brute force");
         }
     }
 
