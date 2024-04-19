@@ -183,8 +183,8 @@ public class ConstructorInt {
                     if (!hasUniqueSolution()) {
                         blankCellsCount--;
                         grid[row][col] = temp;
-                        break;
                     }
+                    break;
                 }
             }
         }
