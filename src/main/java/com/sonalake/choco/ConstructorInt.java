@@ -1,6 +1,5 @@
 package com.sonalake.choco;
 
-import org.antlr.v4.gui.SystemFontMetrics;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.search.strategy.Search;
@@ -19,6 +18,8 @@ public class ConstructorInt {
 
     private int[][] grid;
 
+    private int blankCellsCount = 0;
+
     public ConstructorInt(int size) {
         grid = new int[size][size];
     }
@@ -30,6 +31,10 @@ public class ConstructorInt {
     public int[][] getGrid() {
         return grid;
     }
+
+    public int getBlankCellsCount() {
+        return blankCellsCount;
+    }  
 
     public void printSudokuGrid(int[][] grid) {
         for (int[] row : grid) {
@@ -56,7 +61,6 @@ public class ConstructorInt {
                 for (int num : row) {
                     writer.write(num + ", ");
                 }
-                writer.write("\n");
             }
             writer.close();
         } catch (IOException e) {
@@ -102,7 +106,9 @@ public class ConstructorInt {
             //System.out.println("Failed to remove " + count + " cells symmetrically.");
             removeCountCellsSymmetry(count);
         } else {
+            System.out.println("Removed " + count + " cells symmetrically.");
             grid = copyGrid;
+            blankCellsCount = removed;
         }
     }
 
@@ -143,6 +149,7 @@ public class ConstructorInt {
             removeCountCells(count);
         } else {
             grid = copyGrid;
+            blankCellsCount = count;
             System.out.println("Removed " + count + " cells with brute force");
         }
     }
@@ -153,38 +160,35 @@ public class ConstructorInt {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (grid[i][j] != 0) {
-                    indices.add(i * size + j); // Ajoute uniquement les indices des cellules non vides
+                    indices.add(i * size + j);
                 }
             }
         }
         Collections.shuffle(indices);
         int removed = 0;
         for (int index : indices) {
+            if (removed >= max) break;
             int row = index / size;
             int col = index % size;
             int temp = grid[row][col];
-            if (temp == 0) {
-                removed++;
-                continue;
-            }
             grid[row][col] = 0;
             if (!hasUniqueSolution()) {
-                grid[row][col] = temp; // If removing the cell doesn't leave a unique solution, restore the cell
+                grid[row][col] = temp;
+                //System.out.println("Failed to remove cell at " + row + ", " + col);
             } else {
                 removed++;
+                blankCellsCount++;
                 //System.out.println("Removed " + removed + " cells");
-                if (removed >= min && removed <= max) {
-                    if (!hasUniqueSolution(grid)) {
-                        System.out.println("Failed to remove " + removed + " cells");
-                        System.out.println("The grid has no unique solution, try again the generation");
+                if (removed >= min) {
+                    if (!hasUniqueSolution()) {
+                        blankCellsCount--;
+                        grid[row][col] = temp; // Restauration si après min suppression la grille n'est plus unique
+                        break;
                     }
-                    break; // Required number of cells removed
                 }
             }
         }
-        // System.out.println(Checker.isSudokuValid(grid));
         System.out.println("Removed " + removed + " cells");
-        //System.out.println(Checker.isSudokuValid(grid));
     }
 
     private boolean hasUniqueSolution(int[][] gridToCheck) {
@@ -225,7 +229,7 @@ public class ConstructorInt {
         return !hasSecondSolution;
     }
 
-    private boolean hasUniqueSolution() {
+    public boolean hasUniqueSolution() {
         int size = grid.length;
         int[][] copyGrid = new int[size][size];
         for (int i = 0; i < size; i++) {

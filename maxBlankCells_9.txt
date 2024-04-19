@@ -1,0 +1,2 @@
+Max number of blank cells: 61
+Time took to find it: 65 milliseconds
