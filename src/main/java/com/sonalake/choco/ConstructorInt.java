@@ -84,7 +84,11 @@ public class ConstructorInt {
             System.arraycopy(grid[i], 0, copyGrid[i], 0, size);
         }
 
-        for (int i = 0; i < indices.size() && removed < count / 2; i++) {
+        if (count % 2 != 0) {
+            count--;
+        }
+
+        for (int i = 0; i < indices.size() && removed < count; i++) {
             int pos = indices.get(i);
             int row = pos / size;
             int col = pos % size;
