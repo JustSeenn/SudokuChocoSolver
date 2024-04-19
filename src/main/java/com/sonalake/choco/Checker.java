@@ -7,15 +7,7 @@ import java.util.Set;
 public class Checker {
 
     public static void main(String[] args) {
-        int[] grind = { 1, 2, 3, 4, 5, 6, 8, 9, 7,
-                4, 5, 6, 7, 8, 9, 1, 2, 3,
-                7, 8, 9, 1, 2, 3, 4, 5, 6,
-                2, 3, 1, 6, 7, 4, 9, 8, 5,
-                6, 9, 4, 8, 1, 5, 3, 7, 2,
-                5, 7, 8, 9, 3, 2, 6, 1, 4,
-                3, 4, 5, 2, 9, 1, 7, 6, 8,
-                8, 1, 2, 3, 6, 7, 5, 4, 9,
-                9, 6, 7, 5, 4, 8, 2, 3, 1 };
+        int[] grind = Sudoku.readSudokuFromFile("sudoku_grids_9.txt", 9);
 
         int[][] board = generateSudoku(grind, 9);
         System.out.println(isSudokuValid(board));

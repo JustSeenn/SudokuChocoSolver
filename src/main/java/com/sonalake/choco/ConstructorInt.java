@@ -34,7 +34,7 @@ public class ConstructorInt {
 
     public int getBlankCellsCount() {
         return blankCellsCount;
-    }  
+    }
 
     public void printSudokuGrid(int[][] grid) {
         for (int[] row : grid) {
@@ -103,7 +103,7 @@ public class ConstructorInt {
         }
 
         if (!hasUniqueSolution(copyGrid)) {
-            //System.out.println("Failed to remove " + count + " cells symmetrically.");
+            // System.out.println("Failed to remove " + count + " cells symmetrically.");
             removeCountCellsSymmetry(count);
         } else {
             System.out.println("Removed " + count + " cells symmetrically.");
@@ -113,8 +113,6 @@ public class ConstructorInt {
     }
 
     public void removeCountCells(int count) {
-        // remove cells from the grid without checking for unique solution
-        // check at the end if the grid has an unique solution if not retry
         int size = grid.length;
         List<Integer> indices = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -145,7 +143,6 @@ public class ConstructorInt {
         }
 
         if (!hasUniqueSolution(copyGrid)) {
-            //System.out.println("Failed to remove " + count + " cells");
             removeCountCells(count);
         } else {
             grid = copyGrid;
@@ -167,22 +164,21 @@ public class ConstructorInt {
         Collections.shuffle(indices);
         int removed = 0;
         for (int index : indices) {
-            if (removed >= max) break;
+            if (removed >= max)
+                break;
             int row = index / size;
             int col = index % size;
             int temp = grid[row][col];
             grid[row][col] = 0;
             if (!hasUniqueSolution()) {
                 grid[row][col] = temp;
-                //System.out.println("Failed to remove cell at " + row + ", " + col);
             } else {
                 removed++;
                 blankCellsCount++;
-                //System.out.println("Removed " + removed + " cells");
                 if (removed >= min) {
                     if (!hasUniqueSolution()) {
                         blankCellsCount--;
-                        grid[row][col] = temp; // Restauration si après min suppression la grille n'est plus unique
+                        grid[row][col] = temp;
                         break;
                     }
                 }
@@ -200,32 +196,21 @@ public class ConstructorInt {
         Model model = new Model("Sudoku");
         IntVar[][] vars = buildGrid(model, copyGrid);
 
-        // Define constraints
         addConstraints(model, vars);
 
-        // Search for a solution
         Solver solver = model.getSolver();
         solver.setSearch(Search.minDomLBSearch(flatten(vars)));
 
         boolean hasSolution = solver.solve();
 
-        // System.out.println("Check done on first check : ");
-        // System.out.println(hasSolution);
-
         if (!hasSolution) {
-            return false; // Pas de solution possible
+            return false;
         }
-        
+
         ConstraintImpactStrategy strategy = new ConstraintImpactStrategy(model, flatten(vars));
-        // need to give a pessimistic strategy to avoid finding the same solution
         model.getSolver().setSearch(strategy);
-        // Si on trouve une solution, on essaye d'en trouver une autre
         boolean hasSecondSolution = solver.solve();
 
-        // System.out.println("Check done on second check, no second solution ?: ");
-        // System.out.println(!hasSecondSolution);
-
-        // Si on trouve une deuxième solution, cela signifie qu'il n'y a pas unicité
         return !hasSecondSolution;
     }
 
@@ -249,25 +234,18 @@ public class ConstructorInt {
         long startTime = System.currentTimeMillis();
         boolean hasSolution = solver.solve();
         long endTime = System.currentTimeMillis();
-        
-        
+
         long time = endTime - startTime;
-       
+
         if (!hasSolution) {
             return false; // Pas de solution possible
         }
 
         solver.limitTime(time * 5);
         ConstraintImpactStrategy strategy = new ConstraintImpactStrategy(model, flatten(vars));
-        // need to give a pessimistic strategy to avoid finding the same solution
+
         model.getSolver().setSearch(strategy);
-        // Si on trouve une solution, on essaye d'en trouver une autre
         boolean hasSecondSolution = solver.solve();
-
-        // System.out.println("Check done on second check, no second solution ?: ");
-        // System.out.println(!hasSecondSolution);
-
-        // If we find a second solution, it means that there is no uniqueness
         return !hasSecondSolution;
     }
 

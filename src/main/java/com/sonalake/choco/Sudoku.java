@@ -119,19 +119,12 @@ public class Sudoku {
   private static IntVar[][] buildGrid(Model model, int[][] predefinedRows) {
     // this grid will contain variables in the same shape as the input
     IntVar[][] grid = new IntVar[SIZE][SIZE];
-
-    // check all the predefined values
-    // if they're 0: create them as bounded variables across the colour range (1-9)
-    // otherwise create them as a constance
     for (int row = 0; row != SIZE; row++) {
       for (int col = 0; col != SIZE; col++) {
-        // print predefinedRows[row]
         int value = predefinedRows[row][col];
-        // is this an unknown? if so then create it as a bounded variable
         if (value < MIN_VALUE) {
           grid[row][col] = model.intVar(format("[%s.%s]", row, col), MIN_VALUE, MAX_VALUE);
         } else {
-          // otherwise we have an actual value, so create it as a constant
           grid[row][col] = model.intVar(value);
         }
       }

@@ -6,7 +6,6 @@ import org.chocosolver.solver.search.strategy.decision.Decision;
 import org.chocosolver.solver.search.strategy.strategy.AbstractStrategy;
 import org.chocosolver.solver.variables.IntVar;
 
-
 import org.chocosolver.solver.constraints.Constraint;
 
 import org.chocosolver.solver.variables.Variable;
@@ -46,14 +45,14 @@ public class ConstraintImpactStrategy extends AbstractStrategy<IntVar> {
         // Make a decision on the variable with the highest impact
         if (varWithHighestImpact != null) {
             int value = varWithHighestImpact.getLB();
-            return model.getSolver().getDecisionPath().makeIntDecision(varWithHighestImpact, DecisionOperatorFactory.makeIntEq(), value);
+            return model.getSolver().getDecisionPath().makeIntDecision(varWithHighestImpact,
+                    DecisionOperatorFactory.makeIntEq(), value);
         } else {
             return null; // No variable to make decision on
         }
     }
 
     private double calculateImpact(IntVar var) {
-        // Estimate the impact of assigning a value to the variable
         double impact = 0.0;
         for (Constraint constraint : model.getCstrs()) {
             for (int i = 0; i < constraint.getPropagators().length; i++) {
@@ -63,10 +62,9 @@ public class ConstraintImpactStrategy extends AbstractStrategy<IntVar> {
                         if (!containsVariable(relatedVars, var)) {
                             int propagationConditions = constraint.getPropagator(i).getPropagationConditions(j);
                             if ((propagationConditions & IntEventType.INSTANTIATE.getMask()) != 0 ||
-                                (propagationConditions & IntEventType.INCLOW.getMask()) != 0 ||
-                                (propagationConditions & IntEventType.DECUPP.getMask()) != 0) {
-                                // We consider the propagator for INSTANTIATE, INCLOW, or DECUPP events
-                                // Add its impact to the total impact
+                                    (propagationConditions & IntEventType.INCLOW.getMask()) != 0 ||
+                                    (propagationConditions & IntEventType.DECUPP.getMask()) != 0) {
+
                                 impact += constraint.getPropagator(i).getPropagationConditions(j);
                             }
                         }
@@ -76,8 +74,7 @@ public class ConstraintImpactStrategy extends AbstractStrategy<IntVar> {
         }
         return impact;
     }
-    
-    
+
     private boolean containsVariable(Variable[] variables, Variable var) {
         for (Variable v : variables) {
             if (v == var) {
