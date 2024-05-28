@@ -7,14 +7,14 @@ public class Run {
 
     public static void main(String[] args) {
 
-        int sudokuSize = 9;
+        int sudokuSize = 25;
 
         int i;
         int maxBlankCells = 0;
         long timeTook = 0;
-        for(i=0; i<500; i++){
+        for(i=0; i<10; i++){
             long startTime = System.currentTimeMillis();
-            ConstructorInt sudoku = searchMaxCellsToRemove(sudokuSize,60,64,64);
+            ConstructorInt sudoku = searchMaxCellsToRemove(sudokuSize,400,625,625);
             long endTime = System.currentTimeMillis();
             if(sudoku.getBlankCellsCount() > maxBlankCells){
                 maxBlankCells = sudoku.getBlankCellsCount();
@@ -43,8 +43,8 @@ public class Run {
         long startTime = System.currentTimeMillis();
         ConstructorInt sudoku = new ConstructorInt(size);
         sudoku.createSudokuGrid();
-        //sudoku.removeCountCells(count); // number of cells to remove bruteforce
-        sudoku.removeCountCellsSymmetry(count);
+        sudoku.removeCountCells(count); // number of cells to remove bruteforce
+        //sudoku.removeCountCellsSymmetry(count);
         //sudoku.printSudokuGrid();
         // number of cells to remove with backtracking after bruteforce
         // ex: 2000 bruteforce + 1000 = 3000 here
@@ -55,7 +55,7 @@ public class Run {
         //sudoku.saveGridAsIntegerList("sudoku_grids_9"); // save the grid as a list of integers for sudoku solver
         long endTime = System.currentTimeMillis();
         System.out.println("That took " + (endTime - startTime) + " milliseconds");
-        //System.out.println(sudoku.getBlankCellsCount());
+        System.out.println("Number of blank cells: " + sudoku.getBlankCellsCount());
 
         return sudoku;
     }

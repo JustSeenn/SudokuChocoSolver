@@ -245,10 +245,10 @@ public class ConstructorInt {
             return false; // Pas de solution possible
         }
 
-        solver.limitTime(time * 5);
+        //solver.limitTime(time * 5);
         ConstraintImpactStrategy strategy = new ConstraintImpactStrategy(model, flatten(vars));
 
-        model.getSolver().setSearch(strategy);
+        //model.getSolver().setSearch(strategy);
         boolean hasSecondSolution = solver.solve();
         return !hasSecondSolution;
     }
