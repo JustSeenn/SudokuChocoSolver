@@ -17,11 +17,14 @@ import java.util.stream.Stream;
 public class ConstructorInt {
 
     private int[][] grid;
-
+    public int backtrack;
     private int blankCellsCount = 0;
 
     public ConstructorInt(int size) {
         grid = new int[size][size];
+    }
+    public void setBacktrack(int num){
+        this.backtrack = 0;
     }
 
     public void createSudokuGrid() {
@@ -67,6 +70,38 @@ public class ConstructorInt {
             e.printStackTrace();
         }
     }
+
+    public void removeCellsbis() {
+        int size = grid.length;
+        List<Integer> indices = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (grid[i][j] != 0) {
+                    indices.add(i * size + j);
+                }
+            }
+        }
+        Collections.shuffle(indices);
+        //int i=0;
+        for (int index : indices) {
+            int row = index / size;
+            int col = index % size;
+            int temp = grid[row][col];
+            grid[row][col] = 0;
+            if (!hasUniqueSolution()) {
+                grid[row][col] = temp;
+                break;
+            } else {
+                blankCellsCount++;
+            }
+            //i++;
+            //if(i%(indices.size()/10)==0){
+            //    System.out.println("Removed " + (blankCellsCount) + " cells (i check)");
+            //}
+        }
+        System.out.println("Removed " + (blankCellsCount) + " cells");
+    }
+
 
     public void removeCountCellsSymmetry(int count) {
         int size = grid.length;
@@ -116,7 +151,7 @@ public class ConstructorInt {
         }
     }
 
-    public void removeCountCells(int count) {
+    public int removeCountCells(int count) {
         int size = grid.length;
         List<Integer> indices = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -147,12 +182,15 @@ public class ConstructorInt {
         }
 
         if (!hasUniqueSolution(copyGrid)) {
+            this.backtrack++;
             removeCountCells(count);
-        } else {
+        } else { 
             grid = copyGrid;
-            blankCellsCount = removed;
+            blankCellsCount += removed;
             System.out.println("Removed " + removed + " cells with brute force");
         }
+
+        return this.backtrack;
     }
 
     public void removeCells(int min, int max) {

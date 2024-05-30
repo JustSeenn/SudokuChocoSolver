@@ -8,13 +8,12 @@ public class Run {
     public static void main(String[] args) {
 
         int sudokuSize = 25;
-
         int i;
         int maxBlankCells = 0;
         long timeTook = 0;
-        for(i=0; i<10; i++){
+        for(i=0; i<100; i++){
             long startTime = System.currentTimeMillis();
-            ConstructorInt sudoku = searchMaxCellsToRemove(sudokuSize,400,625,625);
+            ConstructorInt sudoku = searchMaxCellsToRemove(sudokuSize,300,20,150);
             long endTime = System.currentTimeMillis();
             if(sudoku.getBlankCellsCount() > maxBlankCells){
                 maxBlankCells = sudoku.getBlankCellsCount();
@@ -44,13 +43,10 @@ public class Run {
         ConstructorInt sudoku = new ConstructorInt(size);
         sudoku.createSudokuGrid();
         sudoku.removeCountCells(count); // number of cells to remove bruteforce
-        //sudoku.removeCountCellsSymmetry(count);
-        //sudoku.printSudokuGrid();
-        // number of cells to remove with backtracking after bruteforce
-        // ex: 2000 bruteforce + 1000 = 3000 here
-        sudoku.removeCells(min, max);
-        //sudoku.printSudokuGrid();
-        System.out.println(sudoku.hasUniqueSolution());
+        sudoku.removeCountCells(40);
+        //sudoku.removeCells(min, max);
+        sudoku.removeCellsbis();
+        //System.out.println(sudoku.hasUniqueSolution());
         //sudoku.printSudokuGrid();
         //sudoku.saveGridAsIntegerList("sudoku_grids_9"); // save the grid as a list of integers for sudoku solver
         long endTime = System.currentTimeMillis();

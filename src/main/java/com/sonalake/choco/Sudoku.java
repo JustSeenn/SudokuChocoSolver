@@ -25,56 +25,63 @@ import java.io.IOException;
  */
 public class Sudoku {
 
-  private static final int SIZE = 81;
-  private static final int MIN_VALUE = 1;
-  private static final int MAX_VALUE = SIZE;
+  private static int SIZE = 729;
+  private static  int SQUARE_SIZE = (int) Math.sqrt(SIZE);
+  private static  int MIN_VALUE = 1;
+  private static  int MAX_VALUE = SIZE;
 
   static public void main(String... args) throws IOException {
-    // read stringGrind from file
-    String filePath = "sudoku_grids_" + SIZE + ".txt";
+    int[] arr = {9,16,25,36,49,64,81,100,121,144,169,196,225,256,289,324,361,400,441,484,529,576,625,676,729,784,841,900,961,1024};
+    for(int a : arr){
+      SIZE = a;
+      SQUARE_SIZE = (int) Math.sqrt(a);
+      // read stringGrind from file
+      String filePath = "./grids/sudoku_grids_"+SIZE+".txt";
 
-    // Lecture de la grille Sudoku à partir du fichier
-    int[] stringGrind = readSudokuFromFile(filePath, SIZE);
+      // Lecture de la grille Sudoku à partir du fichier
+      int[] stringGrind = readSudokuFromFile(filePath, SIZE);
 
-    int[][] sudokuGrid = generateSudoku(stringGrind, SIZE);
+      int[][] sudokuGrid = generateSudoku(stringGrind, SIZE);
 
-    System.out.println("Size of the grid: " + sudokuGrid.length + "x" + sudokuGrid[0].length);
+      System.out.println("Size of the grid: " + sudokuGrid.length + "x" + sudokuGrid[0].length);
 
-    // check that it's a square matrix
-    for (int i = 0; i < sudokuGrid.length; i++) {
-      if (sudokuGrid[i].length != sudokuGrid.length) {
-        throw new IllegalArgumentException("The input matrix is not a square matrix " + i);
+      // check that it's a square matrix
+      for (int i = 0; i < sudokuGrid.length; i++) {
+        if (sudokuGrid[i].length != sudokuGrid.length) {
+          throw new IllegalArgumentException("The input matrix is not a square matrix " + i);
+        }
       }
-    }
-    // build the variables and constraint models
-    Model model = new Model("sudoku");
-    IntVar[][] grid = buildGrid(model, sudokuGrid);
-    applyConnectionConstraints(model, grid);
+      // build the variables and constraint models
+      Model model = new Model("SudokuSolver");
+      IntVar[][] grid = buildGrid(model, sudokuGrid);
+      applyConnectionConstraints(model, grid);
 
-    // solve it
-    Solver solver = model.getSolver();
-    solver.showShortStatistics();
-    solver.setSearch(Search.minDomLBSearch(flatten(grid)));
-    solver.solve();
-    FileWriter writer = new FileWriter("result.txt");
-    for (IntVar[] v : grid) {
-      for (IntVar i : v) {
-        writer.write(i.getValue() + ",");
+    
+      Solver solver = model.getSolver();
+      
+      solver.setSearch(Search.minDomLBSearch(flatten(grid)));
+      solver.solve();
+      solver.printShortStatistics();
+      FileWriter writer = new FileWriter(filePath+"_result.txt");
+
+      for (IntVar[] v : grid) {
+        for (IntVar i : v) {
+          writer.write(i.getValue() + ",");
+        }
       }
+      writer.close();    
     }
-    writer.close();
-
-    // print out the solution
   }
 
+
   public static int[] readSudokuFromFile(String filePath, int size) {
-    int[] sudokuGrid = new int[size * size]; // Grille Sudoku de 9x9
+    int[] sudokuGrid = new int[size * size]; 
 
     try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
       String line = br.readLine();
       if (line != null) {
         String[] values = line.split(",");
-        for (int i = 0; i < values.length && i < 81; i++) {
+        for (int i = 0; i < values.length && i < size * size; i++) {
           if (!values[i].equals(" ")) {
             sudokuGrid[i] = Integer.parseInt(values[i].trim());
 
@@ -185,7 +192,6 @@ public class Sudoku {
   private static IntVar[] getCellsInSquare(IntVar[][] grid, int square) {
     List<IntVar> results = new ArrayList<>();
     // where does this square start in the grid
-    int SQUARE_SIZE = (int) Math.sqrt(SIZE);
     int startRow = SQUARE_SIZE * (square / (SIZE / SQUARE_SIZE));
     int startColumn = SQUARE_SIZE * (square % (SIZE / SQUARE_SIZE));
 
