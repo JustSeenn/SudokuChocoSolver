@@ -25,15 +25,13 @@ import java.io.IOException;
  */
 public class Sudoku {
 
-  private static final int SIZE = 9;
-  private static final int SQUARE_SIZE = 3;
+  private static final int SIZE = 81;
   private static final int MIN_VALUE = 1;
   private static final int MAX_VALUE = SIZE;
 
   static public void main(String... args) throws IOException {
-
     // read stringGrind from file
-    String filePath = "sudoku_grids_9.txt";
+    String filePath = "sudoku_grids_" + SIZE + ".txt";
 
     // Lecture de la grille Sudoku à partir du fichier
     int[] stringGrind = readSudokuFromFile(filePath, SIZE);
@@ -53,25 +51,20 @@ public class Sudoku {
     IntVar[][] grid = buildGrid(model, sudokuGrid);
     applyConnectionConstraints(model, grid);
 
-    // print out the problem
-    printGrid(grid, false, false);
-
     // solve it
     Solver solver = model.getSolver();
     solver.showShortStatistics();
     solver.setSearch(Search.minDomLBSearch(flatten(grid)));
     solver.solve();
-    System.out.print("[");
+    FileWriter writer = new FileWriter("result.txt");
     for (IntVar[] v : grid) {
       for (IntVar i : v) {
-        System.out.print(i.getValue() + ",");
+        writer.write(i.getValue() + ",");
       }
-      System.out.println();
     }
-    System.out.print("]");
+    writer.close();
 
     // print out the solution
-    printGrid(grid, true, true);
   }
 
   public static int[] readSudokuFromFile(String filePath, int size) {
@@ -83,8 +76,6 @@ public class Sudoku {
         String[] values = line.split(",");
         for (int i = 0; i < values.length && i < 81; i++) {
           if (!values[i].equals(" ")) {
-            System.out.println("val=" + values[i].trim());
-
             sudokuGrid[i] = Integer.parseInt(values[i].trim());
 
           }
@@ -194,6 +185,7 @@ public class Sudoku {
   private static IntVar[] getCellsInSquare(IntVar[][] grid, int square) {
     List<IntVar> results = new ArrayList<>();
     // where does this square start in the grid
+    int SQUARE_SIZE = (int) Math.sqrt(SIZE);
     int startRow = SQUARE_SIZE * (square / (SIZE / SQUARE_SIZE));
     int startColumn = SQUARE_SIZE * (square % (SIZE / SQUARE_SIZE));
 

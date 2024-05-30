@@ -9,11 +9,10 @@ public class Main {
         int size = 9; // Size of the sudoku grid (size x size)
         ConstructorInt sudoku = new ConstructorInt(size);
         sudoku.createSudokuGrid();
-        sudoku.removeCountCells(50);
+        sudoku.removeCountCells((int) Math.floor((size * size) * 0.1));
+        sudoku.removeCells(1, 1);
 
-        sudoku.removeCells(10, 11);
-        sudoku.printSudokuGrid();
-        sudoku.saveGridAsIntegerList("sudoku_grids_9");
+        sudoku.saveGridAsIntegerList("sudoku_grids_" + size);
         long endTime = System.currentTimeMillis();
         System.out.println("That took " + (endTime - startTime) + " milliseconds");
     }
