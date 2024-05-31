@@ -26,17 +26,18 @@ import java.io.IOException;
 public class Sudoku {
 
   private static int SIZE = 729;
-  private static  int SQUARE_SIZE = (int) Math.sqrt(SIZE);
-  private static  int MIN_VALUE = 1;
-  private static  int MAX_VALUE = SIZE;
+  private static int SQUARE_SIZE = (int) Math.sqrt(SIZE);
+  private static int MIN_VALUE = 1;
+  private static int MAX_VALUE = SIZE;
 
   static public void main(String... args) throws IOException {
-    int[] arr = {9,16,25,36,49,64,81,100,121,144,169,196,225,256,289,324,361,400,441,484,529,576,625,676,729,784,841,900,961,1024};
-    for(int a : arr){
+    int[] arr = { 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576,
+        625, 676, 729, 784, 841, 900, 961, 1024 };
+    for (int a : arr) {
       SIZE = a;
       SQUARE_SIZE = (int) Math.sqrt(a);
       // read stringGrind from file
-      String filePath = "./grids/sudoku_grids_"+SIZE+".txt";
+      String filePath = "./grids/sudoku_grids_" + SIZE + ".txt";
 
       // Lecture de la grille Sudoku à partir du fichier
       int[] stringGrind = readSudokuFromFile(filePath, SIZE);
@@ -56,26 +57,24 @@ public class Sudoku {
       IntVar[][] grid = buildGrid(model, sudokuGrid);
       applyConnectionConstraints(model, grid);
 
-    
       Solver solver = model.getSolver();
-      
+
       solver.setSearch(Search.minDomLBSearch(flatten(grid)));
       solver.solve();
       solver.printShortStatistics();
-      FileWriter writer = new FileWriter(filePath+"_result.txt");
+      FileWriter writer = new FileWriter(filePath + "_result.txt");
 
       for (IntVar[] v : grid) {
         for (IntVar i : v) {
           writer.write(i.getValue() + ",");
         }
       }
-      writer.close();    
+      writer.close();
     }
   }
 
-
   public static int[] readSudokuFromFile(String filePath, int size) {
-    int[] sudokuGrid = new int[size * size]; 
+    int[] sudokuGrid = new int[size * size];
 
     try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
       String line = br.readLine();
@@ -127,7 +126,6 @@ public class Sudoku {
         }
       }
     }
-
     return grid;
   }
 
