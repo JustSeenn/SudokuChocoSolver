@@ -31,8 +31,7 @@ public class Sudoku {
   private static int MAX_VALUE = SIZE;
 
   static public void main(String... args) throws IOException {
-    int[] arr = { 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576,
-        625, 676, 729, 784, 841, 900, 961, 1024 };
+    int[] arr = {1024 };
     for (int a : arr) {
       SIZE = a;
       SQUARE_SIZE = (int) Math.sqrt(a);
@@ -59,8 +58,10 @@ public class Sudoku {
 
       Solver solver = model.getSolver();
 
+
       solver.setSearch(Search.minDomLBSearch(flatten(grid)));
-      solver.solve();
+      int oo = 0;
+      while(!solver.solve() || oo > 100){oo++;}
       solver.printShortStatistics();
       FileWriter writer = new FileWriter(filePath + "_result.txt");
 
@@ -149,12 +150,35 @@ public class Sudoku {
    * @param grid  the grid
    */
   private static void applyConnectionConstraints(Model model, IntVar[][] grid) {
-    // all the rows are different
-    for (int i = 0; i != SIZE; i++) {
-      model.allDifferent(getCellsInRow(grid, i)).post();
-      model.allDifferent(getCellsInColumn(grid, i)).post();
-      model.allDifferent(getCellsInSquare(grid, i)).post();
+     // Row and Column Constraints 
+  for (int i = 0; i < SIZE; i++) {
+    IntVar[] rowCells = new IntVar[SIZE];
+    IntVar[] colCells = new IntVar[SIZE];
+    boolean needsRowConstraint = false;
+    boolean needsColConstraint = false;
+
+    for (int j = 0; j < SIZE; j++) {
+      rowCells[j] = grid[i][j];
+      colCells[j] = grid[j][i];
+
+      if (grid[i][j].getLB() == 0) {
+        needsRowConstraint = true;
+      }
+      if (grid[j][i].getLB() == 0) {
+        needsColConstraint = true;
+      }
     }
+
+    if (needsRowConstraint) {
+      model.allDifferent(rowCells).post(); 
+    }
+    if (needsColConstraint) {
+      model.allDifferent(colCells).post();
+    }
+    model.allDifferent(getCellsInSquare(grid,i)).post();
+  }
+
+  
   }
 
   /**

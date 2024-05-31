@@ -7,12 +7,11 @@ import java.util.Set;
 public class Checker {
 
     public static void main(String[] args) {
-        int size = 729;
+        int size = 1024;
         int[] grind = Sudoku.readSudokuFromFile("./grids/sudoku_grids_"+size+".txt_result.txt", size);
 
         int[][] board = generateSudoku(grind, size);
         System.out.println(isSudokuValid(board));
-
     }
 
     public static int[][] generateSudoku(int[] input, int size) {
